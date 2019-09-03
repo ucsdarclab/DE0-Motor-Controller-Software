@@ -1,0 +1,3 @@
+/tmp/tmp.hYdpQhL64b/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/tmp/tmp.hYdpQhL64b/cmake-build-debug/CMakeFiles/edit_cache.dir
+/tmp/tmp.hYdpQhL64b/cmake-build-debug/CMakeFiles/trying.dir
