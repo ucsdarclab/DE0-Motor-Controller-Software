@@ -244,7 +244,7 @@ int main(int args, char** argc){
 
             if (duration >= 1000) {
                 double timeSinceStart = (double) (clock() - loopStart) / CLOCKS_PER_SEC;
-                int32_t setpointTest = (int32_t)(sin(timeSinceStart * 2 * M_PI / 0.25) * 80000);
+                int32_t setpointTest = (int32_t)(sin(timeSinceStart * 2 * M_PI / 1) * 80000);
 
                 start = clock();
 //                motorTip.runPID(100000 * std::sin(2 * 3.14159 * 0.25* (double) ((double) clock() / CLOCKS_PER_SEC)),
