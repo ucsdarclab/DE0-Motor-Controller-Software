@@ -210,10 +210,10 @@ int main(int args, char** argc){
 
 
         MatrixXd motorRadiansToCounts(4,4);
-        motorRadiansToCounts(0,0) = 44 * 1024 / (2 * M_PI);
-        motorRadiansToCounts(1,1) = 44 * 1024 / (2 * M_PI);
-        motorRadiansToCounts(2,2) = 44 * 1024 / (2 * M_PI);
-        motorRadiansToCounts(3,3) = 44 * 1024 / (2 * M_PI);
+        motorRadiansToCounts(0,0) = 44 * 2048 / (2 * M_PI);
+        motorRadiansToCounts(1,1) = 44 * 2048 / (2 * M_PI);
+        motorRadiansToCounts(2,2) = 44 * 2048 / (2 * M_PI);
+        motorRadiansToCounts(3,3) = 44 * 2048 / (2 * M_PI);
 
         MatrixXd pulleyToMotorRatio (4,4);
         pulleyToMotorRatio(0,0) = 50.0/22.0;
@@ -221,19 +221,33 @@ int main(int args, char** argc){
         pulleyToMotorRatio(2,2) = 50.0/22.0;
         pulleyToMotorRatio(3,3) = 50.0/22.0;
 
+        MatrixXd shaftAngleToCounts = pulleyToMotorRatio * motorRadiansToCounts;
+        std::cout << pulleyToMotorRatio << std::endl;
+        std::cout << motorRadiansToCounts << std::endl;
+        std::cout << shaftAngleToCounts << std::endl;
+
         MatrixXd mixingMatrix1 = MatrixXd::Identity(4,4);
         MatrixXd mixingMatrix2 = MatrixXd::Identity(4,4);
         MatrixXd mixingMatrix3 = MatrixXd::Identity(4,4);
         MatrixXd mixingMatrix4 = MatrixXd::Identity(4,4);
-        /*m(0,0) = 3;
-        m(1,0) = 2.5;d
-        m(0,1) = -1;
-        m(1,1) = m(1,0) + m(0,1);*/
 
-        MatrixXd tempMatrix = pulleyToMotorRatio * motorRadiansToCounts;
-        std::cout << pulleyToMotorRatio << std::endl;
-        std::cout << motorRadiansToCounts << std::endl;
-        std::cout << tempMatrix << std::endl;
+        mixingMatrix1(0,0) = 13.7 / 28.0;
+        mixingMatrix2(1,0) = 22.0 / 28.0;
+        mixingMatrix2(1,1) = 13.7 / 28.0;
+
+        //outputs joint angle given input shaft angle
+        MatrixXd fullMixingMatrix = mixingMatrix4 * mixingMatrix3 * mixingMatrix2 * mixingMatrix1;
+
+        //input shaft angle required for output joint angles: calculate inverse of matrix
+        MatrixXd inverseMixingMatrix = fullMixingMatrix.inverse();
+        MatrixXd finalMixingMatrix = inverseMixingMatrix;
+
+        Eigen::Vector4d setpoint(M_PI/4,0,0,0);
+
+        std::cout << "setpoint: " << setpoint << std::endl;
+        std::cout << "mixing matrix 1: " << mixingMatrix1 << std::endl << "mixing matrix 2: " << mixingMatrix2 << std::endl << "mixing matrix 3: " << mixingMatrix3 << std::endl << "mixing matrix 4: " << mixingMatrix4 << std::endl;
+        std::cout << "mixing matrix: " << fullMixingMatrix << std::endl << "inverse mixing matrix: " << finalMixingMatrix << std::endl;
+        std::cout << "output: " << finalMixingMatrix * setpoint << std::endl;
 /*------------------------------------------------------------------------------------------------
 * control loop
 *------------------------------------------------------------------------------------------------*/
@@ -244,7 +258,8 @@ int main(int args, char** argc){
 
             if (duration >= 1000) {
                 double timeSinceStart = (double) (clock() - loopStart) / CLOCKS_PER_SEC;
-                int32_t setpointTest = (int32_t)(sin(timeSinceStart * 2 * M_PI / 1) * 80000);
+                //int32_t setpointTest = (int32_t)(sin(timeSinceStart * 2 * M_PI / 1) * M_PI/8);
+                setpoint(0) = sin(timeSinceStart * 2 * M_PI / 1) * M_PI/3;
 
                 start = clock();
 //                motorTip.runPID(100000 * std::sin(2 * 3.14159 * 0.25* (double) ((double) clock() / CLOCKS_PER_SEC)),
@@ -254,10 +269,11 @@ int main(int args, char** argc){
 //            motorMid.readI2CEncoder(CTRobot::keywords::degree)<<"    "<<
 //            motorBack.readI2CEncoder(CTRobot::keywords::degree)<<std::endl;
 //                motorTip.runPID(setPosMTip,CTRobot::keywords::I2C);
-                motorBack.runPID(setpointTest,CTRobot::keywords::FPGA);
+                motorBack.runPID((int32_t)(shaftAngleToCounts * finalMixingMatrix * setpoint)(0),CTRobot::keywords::FPGA);
                 motorInsertion.runPID(0,CTRobot::keywords::FPGA);
                 motorTip.runPID(0,CTRobot::keywords::FPGA);
-                motorMid.runPID(0,CTRobot::keywords::FPGA);
+                motorMid.runPID((int32_t)(shaftAngleToCounts * finalMixingMatrix * setpoint)(1),CTRobot::keywords::FPGA);
+                //std::cout<<finalMixingMatrix * setpoint<<std::endl;
                 //std::cout<<setpointTest<<std::endl;
 //                std::cout<<motorTip.readEncoder()<<std::endl;
 
@@ -267,6 +283,16 @@ int main(int args, char** argc){
 
             usleep(10);
         }
+
+        loopStart = clock();
+
+        do{
+            motorBack.runPID(0, CTRobot::keywords::FPGA);
+            motorInsertion.runPID(0, CTRobot::keywords::FPGA);
+            motorTip.runPID(0, CTRobot::keywords::FPGA);
+            motorMid.runPID(0, CTRobot::keywords::FPGA);
+            usleep(1000);
+        }while((double) (clock() - loopStart) / CLOCKS_PER_SEC < 5);
 
         motorTip.stop();
     };
