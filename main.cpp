@@ -4,6 +4,11 @@
 #include <Eigen/Dense>
 #include <cmath>
 
+#include <iostream>
+#include <chrono>
+#include <thread>
+
+
 /*------------------------------------------------------------------------------------------------
  * setup
  *------------------------------------------------------------------------------------------------*/
@@ -23,7 +28,7 @@ int CURRENT_FLAG;
 int TRAVEL_FLAG;
 int ETSOP_FLAG;
 int exit_flag;
-float dt;
+double dt = 0.001;
 
 int fd;
 void* virtual_base;
@@ -115,7 +120,7 @@ int main(int args, char** argc){
         }
         std::cout<< "heartbeat shutting down"<<std::endl;
     };
-
+//input  thread
     auto readInputFunc = [](){
         std::string theUserInput;
         do {
@@ -142,6 +147,9 @@ int main(int args, char** argc){
 
 
     auto motorFunc = [](){
+
+        long long loopCounter = 0;
+        double usAverageLoopTime = 0;
 
 //      initialization for for all motors objects
         CTRobot::motorController motorBack(h2p_lw_pwm_values_addr[0], h2p_lw_gpio1_addr, h2p_lw_adc, 7);
@@ -183,18 +191,15 @@ int main(int args, char** argc){
         motorHorizontal.attachEncoder(h2p_lw_quad_addr[7], h2p_lw_quad_reset_addr, 0);
         motorHorizontal.resetEncoder(CTRobot::keywords::FPGA);
 
-
-
-        auto start = clock();
+        auto systemStart = std::chrono::high_resolution_clock::now();
 
         double duration;
-        double xValue;
 
         //motorTip.setPIDValue(0.005, 0.00002, 0.0001, 0.001);
-        motorBack.setPIDValue(0.00005, 0.0000, 0.0000002, 0.001);
-        motorInsertion.setPIDValue(0.00005, 0.0000, 0.0000002, 0.001);
-        motorTip.setPIDValue(0.00005, 0.0000, 0.0000002, 0.001);
-        motorMid.setPIDValue(0.00005, 0.0000, 0.0000002, 0.001);
+        motorBack.setPIDValue(0.00005, 0.0000, 0.0000002, dt);
+        motorInsertion.setPIDValue(0.00005, 0.0000, 0.0000002, dt);
+        motorTip.setPIDValue(0.00005, 0.0000, 0.0000002, dt);
+        motorMid.setPIDValue(0.00005, 0.0000, 0.0000002, dt);
 
         uint32_t ADCVal = 0;
         uint32_t prevADCVal = 0;
@@ -230,10 +235,23 @@ int main(int args, char** argc){
         MatrixXd mixingMatrix2 = MatrixXd::Identity(4,4);
         MatrixXd mixingMatrix3 = MatrixXd::Identity(4,4);
         MatrixXd mixingMatrix4 = MatrixXd::Identity(4,4);
-
+//        matrix 1
         mixingMatrix1(0,0) = 13.7 / 28.0;
+
+//        matrix 2
         mixingMatrix2(1,0) = 22.0 / 28.0;
         mixingMatrix2(1,1) = 13.7 / 28.0;
+
+//       matrix 3
+        mixingMatrix3(2,0) = 1.0;
+        mixingMatrix3(2,1) = 28.0/22.0;
+        mixingMatrix3(2,2)  = -13.7/22.0;
+
+//       matrix 4
+        mixingMatrix4(3,0) = 22.0;
+        mixingMatrix4(3,1) = 28.0;
+        mixingMatrix4(3,2) = -28.0;
+        mixingMatrix4(3,3) = 13.7;
 
         //outputs joint angle given input shaft angle
         MatrixXd fullMixingMatrix = mixingMatrix4 * mixingMatrix3 * mixingMatrix2 * mixingMatrix1;
@@ -251,17 +269,22 @@ int main(int args, char** argc){
 /*------------------------------------------------------------------------------------------------
 * control loop
 *------------------------------------------------------------------------------------------------*/
-        auto loopStart = clock();
-
+//        auto loopStart = clock();
+        MatrixXd temp;
         while(exit_flag == 0) {
-            duration = (double) (clock() - start) / CLOCKS_PER_SEC * 1000000;
+            //duration = (double) (clock() - start) / CLOCKS_PER_SEC * 1000000;
 
-            if (duration >= 1000) {
-                double timeSinceStart = (double) (clock() - loopStart) / CLOCKS_PER_SEC;
-                //int32_t setpointTest = (int32_t)(sin(timeSinceStart * 2 * M_PI / 1) * M_PI/8);
-                setpoint(0) = sin(timeSinceStart * 2 * M_PI / 1) * M_PI/3;
+            auto loopStart = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> timeSinceStart = loopStart- systemStart;
+            //int32_t setpointTest = (int32_t)(sin(timeSinceStart * 2 * M_PI / 1) * M_PI/8);
+            setpoint(0) = sin(timeSinceStart.count() * 2 * M_PI * 0.05) * M_PI/3;
 
-                start = clock();
+            //start = clock();
+
+//		we only need to calculate the matrix once every time!!!!!!!!
+            temp = shaftAngleToCounts * finalMixingMatrix * setpoint;
+
+
 //                motorTip.runPID(100000 * std::sin(2 * 3.14159 * 0.25* (double) ((double) clock() / CLOCKS_PER_SEC)),
 //                                CTRobot::keywords::FPGA);
 //                motorTip.runPID(100,CTRobot::keywords::FPGA);
@@ -269,32 +292,40 @@ int main(int args, char** argc){
 //            motorMid.readI2CEncoder(CTRobot::keywords::degree)<<"    "<<
 //            motorBack.readI2CEncoder(CTRobot::keywords::degree)<<std::endl;
 //                motorTip.runPID(setPosMTip,CTRobot::keywords::I2C);
-                motorBack.runPID((int32_t)(shaftAngleToCounts * finalMixingMatrix * setpoint)(0),CTRobot::keywords::FPGA);
-                motorInsertion.runPID(0,CTRobot::keywords::FPGA);
-                motorTip.runPID(0,CTRobot::keywords::FPGA);
-                motorMid.runPID((int32_t)(shaftAngleToCounts * finalMixingMatrix * setpoint)(1),CTRobot::keywords::FPGA);
-                //std::cout<<finalMixingMatrix * setpoint<<std::endl;
-                //std::cout<<setpointTest<<std::endl;
-//                std::cout<<motorTip.readEncoder()<<std::endl;
+            motorBack.runPID((int32_t)temp(0),CTRobot::keywords::FPGA);
+            motorInsertion.runPID((int32_t)temp(3),CTRobot::keywords::FPGA);
+            motorTip.runPID((int32_t)temp(2),CTRobot::keywords::FPGA);
+            motorMid.runPID((int32_t)temp(1),CTRobot::keywords::FPGA);
 
-            }
-            if(duration >= 2000)
-                std::cout<<"overun"<<std::endl;
+            auto loopEnd = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::micro> duration = loopEnd - loopStart;
+            std::chrono::microseconds dt_chrono((int)(std::pow(10,6)*dt));
+            usAverageLoopTime = usAverageLoopTime * loopCounter / (loopCounter + 1)
+                    + std::chrono::duration_cast<std::chrono::microseconds>(duration).count()/(loopCounter+1);
+            loopCounter++;
 
-            usleep(10);
+            if(duration >= dt_chrono*1.0)
+                int trash = 0;
+                //std::cout<<"overun: "<< std::chrono::duration_cast<std::chrono::microseconds>(duration).count() << " us " << "average loop time: " << usAverageLoopTime << " us" << std::endl;
+            else
+                std::this_thread::sleep_for(dt_chrono - duration);
+
         }
 
-        loopStart = clock();
+        //loopStart = clock();
 
-        do{
-            motorBack.runPID(0, CTRobot::keywords::FPGA);
-            motorInsertion.runPID(0, CTRobot::keywords::FPGA);
-            motorTip.runPID(0, CTRobot::keywords::FPGA);
-            motorMid.runPID(0, CTRobot::keywords::FPGA);
-            usleep(1000);
-        }while((double) (clock() - loopStart) / CLOCKS_PER_SEC < 5);
+//        do{
+//            motorBack.runPID(0, CTRobot::keywords::FPGA);
+//            motorInsertion.runPID(0, CTRobot::keywords::FPGA);
+//            motorTip.runPID(0, CTRobot::keywords::FPGA);
+//            motorMid.runPID(0, CTRobot::keywords::FPGA);
+//            usleep(1000);
+//        }while((double) (clock() - loopStart) / CLOCKS_PER_SEC < 5);
 
         motorTip.stop();
+        motorMid.stop();
+        motorInsertion.stop();
+        motorBack.stop();
     };
 
     std::thread heartBeatThread(heartBeatFunc);
@@ -305,8 +336,6 @@ int main(int args, char** argc){
     usleep(1000);
     inputThread.join();
     motorThread.join();
-
-
 
 
     delete(theBus);
