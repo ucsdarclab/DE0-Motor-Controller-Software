@@ -28,15 +28,17 @@ namespace CTRobot{
             motorPWM.writeWord(0);
         };
 
-//        motorController(const motorController &aController){
-//            motorPWM = aController.motorPWM;
-//            motorDirection = aController.motorDirection;
-//            motorADC = aController.motorADC;
-//            motorIndex = aController.motorIndex;
-//            motorEnable = aController.motorEnable;
-//            motorEncoder = aController.motorEncoder;
-//            i2cEncoder = aController.i2cEncoder;
-//        }
+        motorController () = default;
+
+        motorController(const motorController &aController){
+            motorPWM = aController.motorPWM;
+            motorDirection = aController.motorDirection;
+            motorADC = aController.motorADC;
+            motorIndex = aController.motorIndex;
+            motorEnable = aController.motorEnable;
+            motorEncoder = aController.motorEncoder;
+            i2cEncoder = aController.i2cEncoder;
+        }
 
         ~motorController(){
             if(!motorEncoder)

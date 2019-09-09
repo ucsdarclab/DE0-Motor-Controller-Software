@@ -2,8 +2,8 @@
 // Created by bunny on 8/19/19.
 //
 
-#ifndef MOTOR_TEST_1_FPGAENCODER_H
-#define MOTOR_TEST_1_FPGAENCODER_H
+#ifndef TRYING_TEST_1_FPGAENCODER_H
+#define TRYING_TEST_1_FPGAENCODER_H
 
 #include "fpgaAddressComm.h"
 

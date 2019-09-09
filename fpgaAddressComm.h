@@ -32,9 +32,14 @@ namespace CTRobot{
 //  further functions of the fpga library should inherent from this class or use it as members
     class fpgaCommunication{
     public:
-        fpgaCommunication(unsigned char* anAddr):memAddress(anAddr){};
-        fpgaCommunication(fpgaCommunication const &aCommunication):memAddress(aCommunication.memAddress){};
-        ~fpgaCommunication(){}
+        explicit fpgaCommunication(unsigned char* anAddr):memAddress(anAddr){};
+        fpgaCommunication(fpgaCommunication const &aCommunication){
+            memAddress = aCommunication.memAddress;
+        }
+
+        fpgaCommunication() = default;
+
+        ~fpgaCommunication() = default;
 
         //-------------write functions--------------
         bool writeByte(uint8_t aByte){                  //write a byte to the memory address
