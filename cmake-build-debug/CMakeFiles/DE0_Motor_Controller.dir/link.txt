@@ -1,0 +1,2 @@
+/usr/bin/ar qc libDE0_Motor_Controller.a  CMakeFiles/DE0_Motor_Controller.dir/src/AS5048b.cpp.o CMakeFiles/DE0_Motor_Controller.dir/src/I2CBus.cpp.o CMakeFiles/DE0_Motor_Controller.dir/src/I2CDevice.cpp.o CMakeFiles/DE0_Motor_Controller.dir/src/motorController.cpp.o
+/usr/bin/ranlib libDE0_Motor_Controller.a

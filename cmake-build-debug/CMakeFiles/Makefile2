@@ -44,21 +44,25 @@ RM = /root/cmake/cmake-3.15.1/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /tmp/tmp.hYdpQhL64b
+CMAKE_SOURCE_DIR = /tmp/tmp.krrlUYFTeR
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /tmp/tmp.hYdpQhL64b/cmake-build-debug
+CMAKE_BINARY_DIR = /tmp/tmp.krrlUYFTeR/cmake-build-debug
 
 #=============================================================================
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/trying.dir/all
+all: CMakeFiles/ini_library.dir/all
+all: CMakeFiles/DE0_Motor_Controller.dir/all
+all: CMakeFiles/test.dir/all
 
 .PHONY : all
 
 # The main recursive "clean" target.
-clean: CMakeFiles/trying.dir/clean
+clean: CMakeFiles/ini_library.dir/clean
+clean: CMakeFiles/DE0_Motor_Controller.dir/clean
+clean: CMakeFiles/test.dir/clean
 
 .PHONY : clean
 
@@ -68,31 +72,86 @@ preinstall:
 .PHONY : preinstall
 
 #=============================================================================
-# Target rules for target CMakeFiles/trying.dir
+# Target rules for target CMakeFiles/ini_library.dir
 
 # All Build rule for target.
-CMakeFiles/trying.dir/all:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/depend
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/tmp/tmp.hYdpQhL64b/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target trying"
-.PHONY : CMakeFiles/trying.dir/all
+CMakeFiles/ini_library.dir/all:
+	$(MAKE) -f CMakeFiles/ini_library.dir/build.make CMakeFiles/ini_library.dir/depend
+	$(MAKE) -f CMakeFiles/ini_library.dir/build.make CMakeFiles/ini_library.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/tmp/tmp.krrlUYFTeR/cmake-build-debug/CMakeFiles --progress-num=6,7,8 "Built target ini_library"
+.PHONY : CMakeFiles/ini_library.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/trying.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.hYdpQhL64b/cmake-build-debug/CMakeFiles 7
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/trying.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.hYdpQhL64b/cmake-build-debug/CMakeFiles 0
-.PHONY : CMakeFiles/trying.dir/rule
+CMakeFiles/ini_library.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.krrlUYFTeR/cmake-build-debug/CMakeFiles 3
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/ini_library.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.krrlUYFTeR/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/ini_library.dir/rule
 
 # Convenience name for target.
-trying: CMakeFiles/trying.dir/rule
+ini_library: CMakeFiles/ini_library.dir/rule
 
-.PHONY : trying
+.PHONY : ini_library
 
 # clean rule for target.
-CMakeFiles/trying.dir/clean:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/clean
-.PHONY : CMakeFiles/trying.dir/clean
+CMakeFiles/ini_library.dir/clean:
+	$(MAKE) -f CMakeFiles/ini_library.dir/build.make CMakeFiles/ini_library.dir/clean
+.PHONY : CMakeFiles/ini_library.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/DE0_Motor_Controller.dir
+
+# All Build rule for target.
+CMakeFiles/DE0_Motor_Controller.dir/all:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/depend
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/tmp/tmp.krrlUYFTeR/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5 "Built target DE0_Motor_Controller"
+.PHONY : CMakeFiles/DE0_Motor_Controller.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/DE0_Motor_Controller.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.krrlUYFTeR/cmake-build-debug/CMakeFiles 5
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/DE0_Motor_Controller.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.krrlUYFTeR/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/DE0_Motor_Controller.dir/rule
+
+# Convenience name for target.
+DE0_Motor_Controller: CMakeFiles/DE0_Motor_Controller.dir/rule
+
+.PHONY : DE0_Motor_Controller
+
+# clean rule for target.
+CMakeFiles/DE0_Motor_Controller.dir/clean:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/clean
+.PHONY : CMakeFiles/DE0_Motor_Controller.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test.dir
+
+# All Build rule for target.
+CMakeFiles/test.dir/all: CMakeFiles/DE0_Motor_Controller.dir/all
+CMakeFiles/test.dir/all: CMakeFiles/ini_library.dir/all
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/depend
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/tmp/tmp.krrlUYFTeR/cmake-build-debug/CMakeFiles --progress-num=9,10 "Built target test"
+.PHONY : CMakeFiles/test.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.krrlUYFTeR/cmake-build-debug/CMakeFiles 10
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/test.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.krrlUYFTeR/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/test.dir/rule
+
+# Convenience name for target.
+test: CMakeFiles/test.dir/rule
+
+.PHONY : test
+
+# clean rule for target.
+CMakeFiles/test.dir/clean:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/clean
+.PHONY : CMakeFiles/test.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

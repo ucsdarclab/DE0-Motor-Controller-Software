@@ -48,10 +48,10 @@ RM = /root/cmake/cmake-3.15.1/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /tmp/tmp.hYdpQhL64b
+CMAKE_SOURCE_DIR = /tmp/tmp.krrlUYFTeR
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /tmp/tmp.hYdpQhL64b/cmake-build-debug
+CMAKE_BINARY_DIR = /tmp/tmp.krrlUYFTeR/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.hYdpQhL64b/cmake-build-debug/CMakeFiles /tmp/tmp.hYdpQhL64b/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.krrlUYFTeR/cmake-build-debug/CMakeFiles /tmp/tmp.krrlUYFTeR/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.hYdpQhL64b/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.krrlUYFTeR/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,179 +111,232 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named trying
+# Target rules for targets named ini_library
 
 # Build rule for target.
-trying: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 trying
-.PHONY : trying
+ini_library: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 ini_library
+.PHONY : ini_library
 
 # fast build rule for target.
-trying/fast:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/build
-.PHONY : trying/fast
+ini_library/fast:
+	$(MAKE) -f CMakeFiles/ini_library.dir/build.make CMakeFiles/ini_library.dir/build
+.PHONY : ini_library/fast
 
-AS5048b.o: AS5048b.cpp.o
+#=============================================================================
+# Target rules for targets named DE0_Motor_Controller
 
-.PHONY : AS5048b.o
+# Build rule for target.
+DE0_Motor_Controller: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 DE0_Motor_Controller
+.PHONY : DE0_Motor_Controller
 
-# target to build an object file
-AS5048b.cpp.o:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/AS5048b.cpp.o
-.PHONY : AS5048b.cpp.o
+# fast build rule for target.
+DE0_Motor_Controller/fast:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/build
+.PHONY : DE0_Motor_Controller/fast
 
-AS5048b.i: AS5048b.cpp.i
+#=============================================================================
+# Target rules for targets named test
 
-.PHONY : AS5048b.i
+# Build rule for target.
+test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test
+.PHONY : test
 
-# target to preprocess a source file
-AS5048b.cpp.i:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/AS5048b.cpp.i
-.PHONY : AS5048b.cpp.i
+# fast build rule for target.
+test/fast:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
+.PHONY : test/fast
 
-AS5048b.s: AS5048b.cpp.s
+ini/INIReader.o: ini/INIReader.cpp.o
 
-.PHONY : AS5048b.s
-
-# target to generate assembly for a file
-AS5048b.cpp.s:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/AS5048b.cpp.s
-.PHONY : AS5048b.cpp.s
-
-I2CBus.o: I2CBus.cpp.o
-
-.PHONY : I2CBus.o
-
-# target to build an object file
-I2CBus.cpp.o:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/I2CBus.cpp.o
-.PHONY : I2CBus.cpp.o
-
-I2CBus.i: I2CBus.cpp.i
-
-.PHONY : I2CBus.i
-
-# target to preprocess a source file
-I2CBus.cpp.i:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/I2CBus.cpp.i
-.PHONY : I2CBus.cpp.i
-
-I2CBus.s: I2CBus.cpp.s
-
-.PHONY : I2CBus.s
-
-# target to generate assembly for a file
-I2CBus.cpp.s:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/I2CBus.cpp.s
-.PHONY : I2CBus.cpp.s
-
-I2CDevice.o: I2CDevice.cpp.o
-
-.PHONY : I2CDevice.o
+.PHONY : ini/INIReader.o
 
 # target to build an object file
-I2CDevice.cpp.o:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/I2CDevice.cpp.o
-.PHONY : I2CDevice.cpp.o
+ini/INIReader.cpp.o:
+	$(MAKE) -f CMakeFiles/ini_library.dir/build.make CMakeFiles/ini_library.dir/ini/INIReader.cpp.o
+.PHONY : ini/INIReader.cpp.o
 
-I2CDevice.i: I2CDevice.cpp.i
+ini/INIReader.i: ini/INIReader.cpp.i
 
-.PHONY : I2CDevice.i
+.PHONY : ini/INIReader.i
 
 # target to preprocess a source file
-I2CDevice.cpp.i:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/I2CDevice.cpp.i
-.PHONY : I2CDevice.cpp.i
+ini/INIReader.cpp.i:
+	$(MAKE) -f CMakeFiles/ini_library.dir/build.make CMakeFiles/ini_library.dir/ini/INIReader.cpp.i
+.PHONY : ini/INIReader.cpp.i
 
-I2CDevice.s: I2CDevice.cpp.s
+ini/INIReader.s: ini/INIReader.cpp.s
 
-.PHONY : I2CDevice.s
+.PHONY : ini/INIReader.s
 
 # target to generate assembly for a file
-I2CDevice.cpp.s:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/I2CDevice.cpp.s
-.PHONY : I2CDevice.cpp.s
+ini/INIReader.cpp.s:
+	$(MAKE) -f CMakeFiles/ini_library.dir/build.make CMakeFiles/ini_library.dir/ini/INIReader.cpp.s
+.PHONY : ini/INIReader.cpp.s
 
-heartbeat.o: heartbeat.cpp.o
+ini/ini.o: ini/ini.c.o
 
-.PHONY : heartbeat.o
+.PHONY : ini/ini.o
 
 # target to build an object file
-heartbeat.cpp.o:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/heartbeat.cpp.o
-.PHONY : heartbeat.cpp.o
+ini/ini.c.o:
+	$(MAKE) -f CMakeFiles/ini_library.dir/build.make CMakeFiles/ini_library.dir/ini/ini.c.o
+.PHONY : ini/ini.c.o
 
-heartbeat.i: heartbeat.cpp.i
+ini/ini.i: ini/ini.c.i
 
-.PHONY : heartbeat.i
+.PHONY : ini/ini.i
 
 # target to preprocess a source file
-heartbeat.cpp.i:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/heartbeat.cpp.i
-.PHONY : heartbeat.cpp.i
+ini/ini.c.i:
+	$(MAKE) -f CMakeFiles/ini_library.dir/build.make CMakeFiles/ini_library.dir/ini/ini.c.i
+.PHONY : ini/ini.c.i
 
-heartbeat.s: heartbeat.cpp.s
+ini/ini.s: ini/ini.c.s
 
-.PHONY : heartbeat.s
+.PHONY : ini/ini.s
 
 # target to generate assembly for a file
-heartbeat.cpp.s:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/heartbeat.cpp.s
-.PHONY : heartbeat.cpp.s
+ini/ini.c.s:
+	$(MAKE) -f CMakeFiles/ini_library.dir/build.make CMakeFiles/ini_library.dir/ini/ini.c.s
+.PHONY : ini/ini.c.s
 
-main.o: main.cpp.o
+main/main.o: main/main.cpp.o
 
-.PHONY : main.o
+.PHONY : main/main.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/main.cpp.o
-.PHONY : main.cpp.o
+main/main.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/main.cpp.o
+.PHONY : main/main.cpp.o
 
-main.i: main.cpp.i
+main/main.i: main/main.cpp.i
 
-.PHONY : main.i
+.PHONY : main/main.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/main.cpp.i
-.PHONY : main.cpp.i
+main/main.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/main.cpp.i
+.PHONY : main/main.cpp.i
 
-main.s: main.cpp.s
+main/main.s: main/main.cpp.s
 
-.PHONY : main.s
+.PHONY : main/main.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/main.cpp.s
-.PHONY : main.cpp.s
+main/main.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main/main.cpp.s
+.PHONY : main/main.cpp.s
 
-motorController.o: motorController.cpp.o
+src/AS5048b.o: src/AS5048b.cpp.o
 
-.PHONY : motorController.o
+.PHONY : src/AS5048b.o
 
 # target to build an object file
-motorController.cpp.o:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/motorController.cpp.o
-.PHONY : motorController.cpp.o
+src/AS5048b.cpp.o:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/src/AS5048b.cpp.o
+.PHONY : src/AS5048b.cpp.o
 
-motorController.i: motorController.cpp.i
+src/AS5048b.i: src/AS5048b.cpp.i
 
-.PHONY : motorController.i
+.PHONY : src/AS5048b.i
 
 # target to preprocess a source file
-motorController.cpp.i:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/motorController.cpp.i
-.PHONY : motorController.cpp.i
+src/AS5048b.cpp.i:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/src/AS5048b.cpp.i
+.PHONY : src/AS5048b.cpp.i
 
-motorController.s: motorController.cpp.s
+src/AS5048b.s: src/AS5048b.cpp.s
 
-.PHONY : motorController.s
+.PHONY : src/AS5048b.s
 
 # target to generate assembly for a file
-motorController.cpp.s:
-	$(MAKE) -f CMakeFiles/trying.dir/build.make CMakeFiles/trying.dir/motorController.cpp.s
-.PHONY : motorController.cpp.s
+src/AS5048b.cpp.s:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/src/AS5048b.cpp.s
+.PHONY : src/AS5048b.cpp.s
+
+src/I2CBus.o: src/I2CBus.cpp.o
+
+.PHONY : src/I2CBus.o
+
+# target to build an object file
+src/I2CBus.cpp.o:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/src/I2CBus.cpp.o
+.PHONY : src/I2CBus.cpp.o
+
+src/I2CBus.i: src/I2CBus.cpp.i
+
+.PHONY : src/I2CBus.i
+
+# target to preprocess a source file
+src/I2CBus.cpp.i:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/src/I2CBus.cpp.i
+.PHONY : src/I2CBus.cpp.i
+
+src/I2CBus.s: src/I2CBus.cpp.s
+
+.PHONY : src/I2CBus.s
+
+# target to generate assembly for a file
+src/I2CBus.cpp.s:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/src/I2CBus.cpp.s
+.PHONY : src/I2CBus.cpp.s
+
+src/I2CDevice.o: src/I2CDevice.cpp.o
+
+.PHONY : src/I2CDevice.o
+
+# target to build an object file
+src/I2CDevice.cpp.o:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/src/I2CDevice.cpp.o
+.PHONY : src/I2CDevice.cpp.o
+
+src/I2CDevice.i: src/I2CDevice.cpp.i
+
+.PHONY : src/I2CDevice.i
+
+# target to preprocess a source file
+src/I2CDevice.cpp.i:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/src/I2CDevice.cpp.i
+.PHONY : src/I2CDevice.cpp.i
+
+src/I2CDevice.s: src/I2CDevice.cpp.s
+
+.PHONY : src/I2CDevice.s
+
+# target to generate assembly for a file
+src/I2CDevice.cpp.s:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/src/I2CDevice.cpp.s
+.PHONY : src/I2CDevice.cpp.s
+
+src/motorController.o: src/motorController.cpp.o
+
+.PHONY : src/motorController.o
+
+# target to build an object file
+src/motorController.cpp.o:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/src/motorController.cpp.o
+.PHONY : src/motorController.cpp.o
+
+src/motorController.i: src/motorController.cpp.i
+
+.PHONY : src/motorController.i
+
+# target to preprocess a source file
+src/motorController.cpp.i:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/src/motorController.cpp.i
+.PHONY : src/motorController.cpp.i
+
+src/motorController.s: src/motorController.cpp.s
+
+.PHONY : src/motorController.s
+
+# target to generate assembly for a file
+src/motorController.cpp.s:
+	$(MAKE) -f CMakeFiles/DE0_Motor_Controller.dir/build.make CMakeFiles/DE0_Motor_Controller.dir/src/motorController.cpp.s
+.PHONY : src/motorController.cpp.s
 
 # Help Target
 help:
@@ -292,26 +345,31 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
+	@echo "... ini_library"
 	@echo "... edit_cache"
-	@echo "... trying"
-	@echo "... AS5048b.o"
-	@echo "... AS5048b.i"
-	@echo "... AS5048b.s"
-	@echo "... I2CBus.o"
-	@echo "... I2CBus.i"
-	@echo "... I2CBus.s"
-	@echo "... I2CDevice.o"
-	@echo "... I2CDevice.i"
-	@echo "... I2CDevice.s"
-	@echo "... heartbeat.o"
-	@echo "... heartbeat.i"
-	@echo "... heartbeat.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
-	@echo "... motorController.o"
-	@echo "... motorController.i"
-	@echo "... motorController.s"
+	@echo "... DE0_Motor_Controller"
+	@echo "... test"
+	@echo "... ini/INIReader.o"
+	@echo "... ini/INIReader.i"
+	@echo "... ini/INIReader.s"
+	@echo "... ini/ini.o"
+	@echo "... ini/ini.i"
+	@echo "... ini/ini.s"
+	@echo "... main/main.o"
+	@echo "... main/main.i"
+	@echo "... main/main.s"
+	@echo "... src/AS5048b.o"
+	@echo "... src/AS5048b.i"
+	@echo "... src/AS5048b.s"
+	@echo "... src/I2CBus.o"
+	@echo "... src/I2CBus.i"
+	@echo "... src/I2CBus.s"
+	@echo "... src/I2CDevice.o"
+	@echo "... src/I2CDevice.i"
+	@echo "... src/I2CDevice.s"
+	@echo "... src/motorController.o"
+	@echo "... src/motorController.i"
+	@echo "... src/motorController.s"
 .PHONY : help
 
 

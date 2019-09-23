@@ -1,0 +1,2 @@
+/usr/bin/ar qc libini_library.a  CMakeFiles/ini_library.dir/ini/ini.c.o CMakeFiles/ini_library.dir/ini/INIReader.cpp.o
+/usr/bin/ranlib libini_library.a
