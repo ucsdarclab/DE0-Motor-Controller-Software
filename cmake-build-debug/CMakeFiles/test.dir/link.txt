@@ -1,1 +1,0 @@
-/usr/bin/c++   -std=c++11 -pthread -g   CMakeFiles/test.dir/main/main.cpp.o  -o test /usr/lib/librobotcontrol.so libini_library.a libDE0_Motor_Controller.a 

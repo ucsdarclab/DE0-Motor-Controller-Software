@@ -91,7 +91,10 @@ int16_t InsertionJointLimitUpper,
         BackJointLimitUpper,
         BackJointLimitLower,
         RotationJointLimitUpper,
-        RotationJointLimitLower;
+        RotationJointLimitLower,
+        motorBackOffset,
+        motorTipOffset,
+        motorMidOffset;
 
 int32_t LinearAxisUpperLimit,
         LinearAxisLowerLimit,
@@ -182,7 +185,7 @@ void miscAddressesSetup(){
 
     h2p_lw_adc = static_cast<unsigned char*>(virtual_base) + ( ( unsigned long  )( ALT_LWFPGASLVS_OFST + ADC_0_BASE ) & ( unsigned long)( HW_REGS_MASK ) );
 
-//    alt_write_word(h2p_lw_adc, 0);
+    alt_write_word(h2p_lw_adc, 0);
 
 
     alt_write_word(h2p_lw_quad_reset_addr, 0);
@@ -234,6 +237,11 @@ void loadINIConfigr(){
     VerticalAxisMotorCurrentLimit     = reader.GetInteger("SAFETY","HorizontalAxisLowerLimit", -9999);
     HorizontalAxisMotorCurrentLimit = reader.GetInteger("SAFETY","HorizontalAxisLowerLimit", -9999);
 
+    motorBackOffset                        = reader.GetInteger("GENERAL","motorBackOffset", 0);
+    motorTipOffset                           = reader.GetInteger("GENERAL","motorTipOffset", 0);
+    motorMidOffset                          = reader.GetInteger("GENERAL","motorMidOffset", 0);
+
+
 }
 
 
@@ -241,8 +249,8 @@ void loadINIConfigr(){
 void readInputFunc(){
     std::string theUserInput;
     std::stringstream ss;
+    std::cout<<'>';
     do {
-        std::cout << std::endl << "> ";
         if(std::getline(std::cin, theUserInput)) {
             mtx.lock();
             if(theUserInput.length()) {
@@ -286,8 +294,37 @@ void readInputFunc(){
             mtx.unlock();
             usleep(10);
         }
+//        motorMid.readI2CEncoder();
     }
     while (!exit_flag);
 };
+
+
+void homeMotor(){
+    int32_t aPosition = -1000;
+    double currentAngle, previousAngle = 0;
+    motorTip.move(250,CTRobot::keywords::backward);
+    usleep(100000);
+    std::cout<<"cao"<<std::endl;
+    while(!exit_flag){
+        motorTip.move(250,CTRobot::keywords::backward);
+        currentAngle = motorTip.readI2CEncoder(CTRobot::keywords::degree);
+
+        std::cout<<"cao"<<std::endl;
+        usleep(50000);
+        std::cout<< currentAngle <<"  "<< previousAngle<<std::endl;
+        if(fabs(currentAngle - previousAngle) < 0.5)
+            break;
+        previousAngle = currentAngle;
+    }
+    motorTip.resetEncoder(CTRobot::keywords::FPGA);
+    motorTip.setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
+    while(!exit_flag && abs(aPosition - motorTip.readEncoder()) >= 200){
+        motorTip.runPID(aPosition,CTRobot::keywords::FPGA);
+        usleep(1000);
+    }
+    motorTip.resetEncoder(CTRobot::keywords::FPGA);
+    motorTip.resetEncoder(CTRobot::keywords::I2C);
+}
 
 #endif //TRYING_MAIN_H

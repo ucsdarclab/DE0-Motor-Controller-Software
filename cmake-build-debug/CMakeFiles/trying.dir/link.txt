@@ -1,1 +1,0 @@
-/usr/bin/c++   -std=c++11 -pthread -g   CMakeFiles/trying.dir/main.cpp.o CMakeFiles/trying.dir/I2CBus.cpp.o CMakeFiles/trying.dir/I2CDevice.cpp.o CMakeFiles/trying.dir/AS5048b.cpp.o CMakeFiles/trying.dir/motorController.cpp.o CMakeFiles/trying.dir/heartbeat.cpp.o  -o trying /usr/lib/librobotcontrol.so 

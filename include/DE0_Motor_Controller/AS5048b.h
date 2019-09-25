@@ -6,8 +6,8 @@
 #define MOTOR_TEST_1_AS5048B_H
 
 #include <cmath>
-#include "DE0_Motor_Controller/I2CDevice.h"
-#include "DE0_Motor_Controller/fpgaAddressComm.h"//only for keywords
+#include "I2CDevice.h"
+#include "fpgaAddressComm.h"//only for keywords
 
 // Default addresses for AS5048B
 #define AS5048_ADDRESS 0x40 // 0b10000 + ( A1 & A2 to GND)
@@ -44,12 +44,10 @@
 namespace CTRobot{
     class AS5048b: public I2CSlaveDevice{
     public:
-        AS5048b(uint8_t anAddress): I2CSlaveDevice(anAddress), offset(0), buffer(nullptr),MSB(0),LSB(0),currentAngle(0),
+        AS5048b(uint8_t anAddress, int16_t aOffset = 0): I2CSlaveDevice(anAddress), offset(aOffset),MSB(0),LSB(0),currentAngle(0),
         currentAngleR(0),previousAngle(0){
         }
         ~AS5048b(){
-            if(!buffer)
-                delete[] buffer;
         }
 
         uint8_t     addressRegR();
@@ -71,7 +69,6 @@ namespace CTRobot{
         double currentAngle;
         uint8_t MSB;
         uint8_t LSB;
-        unsigned char* buffer;
     };
 }
 

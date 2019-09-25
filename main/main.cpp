@@ -1,4 +1,6 @@
 #include "main.h"
+
+
 using Eigen::MatrixXd;
 
 /*------------------------------------------------------------------------------------------------
@@ -12,9 +14,9 @@ int main(int args, char** argc){
 
     fpgaEncoderAddressesSetup();
 
-   miscAddressesSetup();
+    miscAddressesSetup();
 
-   loadINIConfigr();
+    loadINIConfigr();
 //    end of initialization
 
 
@@ -22,7 +24,7 @@ int main(int args, char** argc){
     auto heartBeatFunc = [](){
         CTRobot::fpgaHeartBeat heartBeat(h2p_lw_heartbeat_addr);
         std::cout<< "heartbeat on"<<std::endl;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+
         while (exit_flag == 0) {
             heartBeat.changeState();
             usleep(10000);
@@ -51,47 +53,44 @@ int main(int args, char** argc){
         motorVertical = CTRobot::motorController (h2p_lw_pwm_values_addr[6], h2p_lw_gpio1_addr, h2p_lw_adc, 1);
         motorHorizontal = CTRobot::motorController (h2p_lw_pwm_values_addr[7], h2p_lw_gpio1_addr, h2p_lw_adc, 0);
 
+
         motorBack.attachEncoder(h2p_lw_quad_addr[0], h2p_lw_quad_reset_addr, 7);
-        motorBack.attachEncoder(theBus, 0x44);
-        motorBack.resetEncoder(CTRobot::keywords::FPGA);
-        motorBack.resetEncoder(CTRobot::keywords::I2C);
+        motorBack.attachEncoder(theBus, 0x44, motorBackOffset);
+//        motorBack.resetEncoder(CTRobot::keywords::FPGA);
+//        motorBack.resetEncoder(CTRobot::keywords::I2C);
 
         motorInsertion.attachEncoder(h2p_lw_quad_addr[1], h2p_lw_quad_reset_addr, 6);
-        motorInsertion.resetEncoder(CTRobot::keywords::FPGA);
+
 
         motorTip.attachEncoder(h2p_lw_quad_addr[2], h2p_lw_quad_reset_addr, 5);
-        motorTip.attachEncoder(theBus, 0x4d);
-        motorTip.resetEncoder(CTRobot::keywords::FPGA);
-        motorTip.resetEncoder(CTRobot::keywords::I2C);
+        motorTip.attachEncoder(theBus, 0x41, motorTipOffset);
+
+//        motorTip.resetEncoder(CTRobot::keywords::I2C);
 
         motorMid.attachEncoder(h2p_lw_quad_addr[3], h2p_lw_quad_reset_addr, 4);
-        motorMid.attachEncoder(theBus, 0x40);
-        motorMid.resetEncoder(CTRobot::keywords::FPGA);
-        motorMid.resetEncoder(CTRobot::keywords::I2C);
+        motorMid.attachEncoder(theBus, 0x40, motorMidOffset);
+
+//        motorMid.resetEncoder(CTRobot::keywords::I2C);
 
         motorRotation.attachEncoder(h2p_lw_quad_addr[4], h2p_lw_quad_reset_addr, 3);
         motorRotation.resetEncoder(CTRobot::keywords::FPGA);
 
         motorLinear.attachEncoder(h2p_lw_quad_addr[5], h2p_lw_quad_reset_addr, 2);
-        motorLinear.resetEncoder(CTRobot::keywords::FPGA);
+//        motorLinear.resetEncoder(CTRobot::keywords::FPGA);
 
         motorVertical.attachEncoder(h2p_lw_quad_addr[6], h2p_lw_quad_reset_addr, 1);
-        motorVertical.resetEncoder(CTRobot::keywords::FPGA);
+//        motorVertical.resetEncoder(CTRobot::keywords::FPGA);
 
         motorHorizontal.attachEncoder(h2p_lw_quad_addr[7], h2p_lw_quad_reset_addr, 0);
-        motorHorizontal.resetEncoder(CTRobot::keywords::FPGA);
+//        motorHorizontal.resetEncoder(CTRobot::keywords::FPGA);
+//        homeMotor();
+
+
 
         auto systemStart = std::chrono::high_resolution_clock::now();
 
-        double duration;
-
         //motorTip.setPIDValue(0.005, 0.00002, 0.0001, 0.001);
-        motorBack.setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
-        motorInsertion.setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
-        motorTip.setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
-        motorMid.setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
 
-        exit_flag_main = 0;
         MatrixXd motorRadiansToCounts(4,4);
         motorRadiansToCounts(0,0) = 44 * 2048 / (2 * M_PI);
         motorRadiansToCounts(1,1) = 44 * 2048 / (2 * M_PI);
@@ -150,19 +149,45 @@ int main(int args, char** argc){
 //        auto loopStart = clock();
         MatrixXd temp;
 
+        auto loopStart = std::chrono::high_resolution_clock::now();
+        auto loopEnd = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::micro> duration = loopStart - loopEnd;
+        std::chrono::microseconds dt_chrono((int)(std::pow(10,6)*dt));
 
+        double angleTemp = 180;
+        motorTip.setPIDValue(0.05, I_float, 0.00001, 10.0/sampleRate);
+
+
+        while(exit_flag == 0 and fabs(angleTemp) >= 1){
+            motorTip.runPID(0,CTRobot::keywords::I2C);
+            angleTemp = motorTip.readI2CEncoder();
+            std::cout << angleTemp <<std::endl;
+            usleep(10000);
+        }
+
+
+        motorInsertion.resetEncoder(CTRobot::keywords::FPGA);
+        motorTip.resetEncoder(CTRobot::keywords::FPGA);
+        motorMid.resetEncoder(CTRobot::keywords::FPGA);
+        motorBack.resetEncoder(CTRobot::keywords::FPGA);
+
+        motorBack.setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
+        motorInsertion.setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
+        motorTip.setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
+        motorMid.setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
 
         while(exit_flag == 0) {
             //duration = (double) (clock() - start) / CLOCKS_PER_SEC * 1000000;
 
-            auto loopStart = std::chrono::high_resolution_clock::now();
+            loopStart = std::chrono::high_resolution_clock::now();
+
             std::chrono::duration<double> timeSinceStart = loopStart- systemStart;
 //            int32_t setpointTest = (int32_t)(sin(timeSinceStart * 2 * M_PI / 1) * M_PI/8);
 //            setpoint(0) = sin(timeSinceStart.count() * 2 * M_PI * 0.05) * M_PI/3;
-                setpoint(0) = (float)setPosMBack/360.0 * 2 * M_PI;
-                setpoint(1) = (float)setPosMMid/360.0 * 2 * M_PI;
-                setpoint(2) = (float)setPosMTip/360.0 * 2 * M_PI;
-                setpoint(3) = (float)setPosMInsertion/360.0 * 2 * M_PI;
+            setpoint(0) = (float)setPosMBack/360.0 * 2 * M_PI;
+            setpoint(1) = (float)setPosMMid/360.0 * 2 * M_PI;
+            setpoint(2) = (float)setPosMTip/360.0 * 2 * M_PI;
+            setpoint(3) = (float)setPosMInsertion/360.0 * 2 * M_PI;
             //start = clock();
 
 //		we only need to calculate the matrix once every time!!!!!!!!
@@ -180,21 +205,17 @@ int main(int args, char** argc){
             motorMid.runPID((int32_t)temp(1),CTRobot::keywords::FPGA);
 
 
-
 //            motorTip.move(150, CTRobot::keywords::forward);
 
 
-            auto loopEnd = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::micro> duration = loopEnd - loopStart;
-            std::chrono::microseconds dt_chrono((int)(std::pow(10,6)*dt));
-            usAverageLoopTime = usAverageLoopTime * loopCounter / (loopCounter + 1)
-                                + std::chrono::duration_cast<std::chrono::microseconds>(duration).count()/(loopCounter+1);
+            loopEnd = std::chrono::high_resolution_clock::now();
+            duration = loopEnd - loopStart;
+
+            usAverageLoopTime = usAverageLoopTime * (float)loopCounter / (float)(loopCounter + 1)
+                                + (float)std::chrono::duration_cast<std::chrono::microseconds>(duration).count()/(float)(loopCounter+1);
             loopCounter++;
-
-
             if(duration >= dt_chrono*1.0)
-                int trash = 0;
-                //std::cout<<"overun: "<< std::chrono::duration_cast<std::chrono::microseconds>(duration).count() << " us " << "average loop time: " << usAverageLoopTime << " us" << std::endl;
+                std::cout<<"overun: "<< std::chrono::duration_cast<std::chrono::microseconds>(duration).count() << " us " << "average loop time: " << usAverageLoopTime << " us" << std::endl;
             else
                 std::this_thread::sleep_for(dt_chrono - duration);
 
@@ -217,13 +238,14 @@ int main(int args, char** argc){
     };
 
     std::thread heartBeatThread(heartBeatFunc);
-    std::thread motorThread(motorFunc);
     std::thread inputThread(readInputFunc);
+    std::thread motorThread(motorFunc);
+
 
     heartBeatThread.join();
     usleep(1000);
-    inputThread.join();
     motorThread.join();
+    inputThread.join();
 
 
 

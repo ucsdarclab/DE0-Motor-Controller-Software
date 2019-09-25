@@ -2,7 +2,7 @@
 // Created by bunny on 8/19/19.
 //
 
-#include "DE0_Motor_Controller/AS5048b.h"
+#include "AS5048b.h"
 
 namespace CTRobot{
 
@@ -56,6 +56,7 @@ namespace CTRobot{
 //        writeReg8(AS5048B_ZEROMSB_REG,((uint8_t)ret >> 6));
 //        writeReg8(AS5048B_ZEROLSB_REG,((uint8_t)ret & 0x3f));
         offset = readAngleRaw();
+        std::cout<<offset<<std::endl;
         return*this;
     }
 
