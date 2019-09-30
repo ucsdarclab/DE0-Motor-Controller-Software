@@ -53,7 +53,7 @@ namespace CTRobot{
 //        attach fpga encoder
         motorController& attachEncoder(unsigned char* aEncoderAddr, unsigned char* encoderResetAddr, uint32_t anIndex);
 //        attach i2c encoder
-        motorController& attachEncoder(I2CBus* aBus, uint8_t anI2cAddr);
+        motorController& attachEncoder(I2CBus* aBus, uint8_t anI2cAddr, uint32_t anOffset);
 
         int32_t readEncoder();
         double readI2CEncoder(keywords aKeywords = keywords::degree);
@@ -65,7 +65,7 @@ namespace CTRobot{
 
 //------PID function for individual motor-----
         motorController& setPIDValue(float aP = 0.0008, float aI = 0.0002, float aD = 0.000005, float dt = 0.001);
-        void runPID(int32_t aDestination, keywords aKeyword);
+        void runPID(int32_t aDestination, keywords aKeyword, uint16_t aCap = 2047);
 //--------------------------------------------
 
     protected:

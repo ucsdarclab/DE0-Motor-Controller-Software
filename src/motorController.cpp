@@ -30,7 +30,7 @@ namespace CTRobot{
         resetEncoder();
         return *this;
     }
-    motorController &motorController::attachEncoder(I2CBus* aBus, uint8_t anI2cAddr) {
+    motorController &motorController::attachEncoder(I2CBus* aBus, uint8_t anI2cAddr, uint32_t anOffset) {
         if(i2cEncoder != nullptr)
             delete(i2cEncoder);
         i2cEncoder = new AS5048b(anI2cAddr);
@@ -79,7 +79,7 @@ namespace CTRobot{
         return *this;
     }
 
-    void motorController::runPID(int32_t aDestination, keywords aKeyword) {
+    void motorController::runPID(int32_t aDestination, keywords aKeyword, uint16_t aCap) {
         if (motorEncoder == nullptr && i2cEncoder == nullptr) {
             throw std::runtime_error(std::string("Encoder not attached"));
         }
@@ -93,9 +93,9 @@ namespace CTRobot{
             throw std::runtime_error(std::string("wrong keywords for encoder"));
 //        std::cout<<PWMOutput<<std::endl;
         auto motorDir = (PWMOutput >= 0) ? (CTRobot::keywords::forward) : (CTRobot::keywords::backward);
-        PWMOutput = fabs(PWMOutput);
+        PWMOutput = abs(PWMOutput);
 
-        PWMOutput = (PWMOutput >= 2047) ? 2047 : PWMOutput;
+        PWMOutput = (PWMOutput >= aCap) ? aCap : PWMOutput;
 
         move(PWMOutput, motorDir);
 

@@ -20,6 +20,7 @@
 #include <bitset>
 #include <chrono>
 #include <fstream>
+#include <vector>
 #include "Eigen/Dense"
 
 extern "C"{
@@ -94,7 +95,8 @@ int16_t InsertionJointLimitUpper,
         RotationJointLimitLower,
         motorBackOffset,
         motorTipOffset,
-        motorMidOffset;
+        motorMidOffset,
+        PWMCap;
 
 int32_t LinearAxisUpperLimit,
         LinearAxisLowerLimit,
@@ -114,14 +116,15 @@ float     InsertionMotorCurrentLimit,
 
 //----------------
 
-CTRobot::motorController motorBack;
-CTRobot::motorController motorInsertion;
-CTRobot::motorController motorTip;
-CTRobot::motorController motorMid;
-CTRobot::motorController motorRotation;
-CTRobot::motorController motorLinear;
-CTRobot::motorController motorVertical;
-CTRobot::motorController motorHorizontal;
+std::vector<CTRobot::motorController> motorStack;
+//CTRobot::motorController motorBack;
+//CTRobot::motorController motorInsertion;
+//CTRobot::motorController motorTip;
+//CTRobot::motorController motorMid;
+//CTRobot::motorController motorRotation;
+//CTRobot::motorController motorLinear;
+//CTRobot::motorController motorVertical;
+//CTRobot::motorController motorHorizontal;
 
 //-----i2c sensor bus--------------------------
 std::string busName = "/dev/i2c-1";
@@ -210,6 +213,7 @@ void loadINIConfigr(){
 //---------------------------------
 
 //safety limits
+    PWMCap                         = reader.GetInteger("SAFETY","PWMCap", 0);
     InsertionJointLimitUpper = reader.GetInteger("SAFETY","InsertionJointLimitUpper", -9999);
     InsertionJointLimitLower = reader.GetInteger("SAFETY","InsertionJointLimitLower", -9999);
     TipJointLimitUpper          = reader.GetInteger("SAFETY","TipJointLimitUpper", -9999);
@@ -261,10 +265,10 @@ void readInputFunc(){
 
                 else if(theUserInput == "reload") {
                     loadINIConfigr();
-                    motorBack.setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
-                    motorInsertion.setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
-                    motorTip.setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
-                    motorMid.setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
+                    motorStack[7].setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
+                    motorStack[5].setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
+                    motorStack[4].setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
+                    motorStack[6].setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
                 }
 
                 else if(theUserInput == "printPID")
@@ -300,31 +304,6 @@ void readInputFunc(){
 };
 
 
-void homeMotor(){
-    int32_t aPosition = -1000;
-    double currentAngle, previousAngle = 0;
-    motorTip.move(250,CTRobot::keywords::backward);
-    usleep(100000);
-    std::cout<<"cao"<<std::endl;
-    while(!exit_flag){
-        motorTip.move(250,CTRobot::keywords::backward);
-        currentAngle = motorTip.readI2CEncoder(CTRobot::keywords::degree);
 
-        std::cout<<"cao"<<std::endl;
-        usleep(50000);
-        std::cout<< currentAngle <<"  "<< previousAngle<<std::endl;
-        if(fabs(currentAngle - previousAngle) < 0.5)
-            break;
-        previousAngle = currentAngle;
-    }
-    motorTip.resetEncoder(CTRobot::keywords::FPGA);
-    motorTip.setPIDValue(P_float, I_float, D_float, 1.0/sampleRate);
-    while(!exit_flag && abs(aPosition - motorTip.readEncoder()) >= 200){
-        motorTip.runPID(aPosition,CTRobot::keywords::FPGA);
-        usleep(1000);
-    }
-    motorTip.resetEncoder(CTRobot::keywords::FPGA);
-    motorTip.resetEncoder(CTRobot::keywords::I2C);
-}
 
 #endif //TRYING_MAIN_H
