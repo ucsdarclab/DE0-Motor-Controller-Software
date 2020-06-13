@@ -11,6 +11,7 @@ extern "C"{
 
 #include <map>
 #include <cmath>
+#include <bitset>
 #include "DE0_Motor_Controller/fpgaAddressComm.h"
 #include "DE0_Motor_Controller/fpgaEncoder.h"
 #include "DE0_Motor_Controller/AS5048b.h"
@@ -22,7 +23,7 @@ namespace CTRobot{
     public:
         motorController(unsigned char* PWMAddress, unsigned char* dirAddress, unsigned char* ADCAddr, uint32_t anIndex):
                 motorPWM(PWMAddress), motorDirection(dirAddress),motorADC(ADCAddr),
-                motorIndex(anIndex), motorEnable(NULL), motorEncoder(nullptr), i2cEncoder(nullptr){
+                motorIndex(anIndex), motorEnable(NULL), motorEncoder(nullptr), i2cEncoder(nullptr), previousHB(0){
 
             PIDfilter = rc_filter_empty();
             motorPWM.writeWord(0);
@@ -77,6 +78,7 @@ namespace CTRobot{
         AS5048b *i2cEncoder;
         uint32_t motorIndex;
         rc_filter_t PIDfilter;
+        u_int8_t previousHB;
     };
 }
 

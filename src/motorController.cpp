@@ -6,15 +6,25 @@
 namespace CTRobot{
     bool motorController::move(uint32_t aSpeed, keywords aKeyword) {
 //      acquire current state and compute altered state
-        uint32_t temp = motorDirection.readWord();
-        temp = temp & ~(1UL<<motorIndex);
+//        uint32_t temp = motorDirection.readWord();
+//        temp = temp & ~(1UL<<motorIndex);
+//        if(aKeyword == keywords::forward)
+//            temp = temp | (0<<motorIndex);
+//        else
+//            temp = temp | (1<<motorIndex);
+//
+//        motorDirection.writeWord(temp);
+        uint32_t temp = aSpeed;
+//        set direction
         if(aKeyword == keywords::forward)
-            temp = temp | (0<<motorIndex);
+            temp = temp | (1<<11);
         else
-            temp = temp | (1<<motorIndex);
-
-        motorDirection.writeWord(temp);
-        motorPWM.writeWord(aSpeed);
+            temp = temp | (0<<11);
+//        set heartbeat
+        previousHB = previousHB ^ 1;
+        temp = temp | (previousHB << 12);
+        motorPWM.writeWord(temp);
+//        std::cout << std::bitset<16>(temp)<<std::endl;
 
         return true;
     }

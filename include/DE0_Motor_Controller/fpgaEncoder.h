@@ -19,10 +19,12 @@ namespace CTRobot{
         }
 
         void reset(){
-//            uint32_t temp = encoderResetAddr.readWord();
-//            temp = temp & ~(0b01<<encoderIndex);
-//            encoderResetAddr.writeWord(0xffffffff); //<< (7 - encoderIndex));
-                offset = encoderResetAddr.readWord();
+            uint32_t temp = encoderResetAddr.readWord();
+            temp = temp | (1<<encoderIndex + 8);
+            encoderResetAddr.writeWord(temp);
+//            encoderResetAddr.writeWord(0xffff);
+            encoderResetAddr.writeWord(0x0000);
+//                offset = encoderResetAddr.readWord();
         }
 
         uint32_t getIndex(){
